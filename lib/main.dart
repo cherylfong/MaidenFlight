@@ -183,6 +183,23 @@ class RandomWordsState extends State<RandomWords> {
     );
   }
 
+  // return the instance in the Set with the matching WordPair
+  Saves getItemInSavingSet(WordPair w){
+
+    print("START COMPARE");
+    for(var s in _savingSet){
+
+      print( "compare " + w.toString() + " : " + s._word.toString());
+      if( w == s._word ){
+        print("START COMPARE");
+        return s;
+      }
+    }
+    print("START COMPARE");
+      return null;
+
+  }
+
 }
 
 
