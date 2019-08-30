@@ -5,6 +5,28 @@ import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
+class Saves {
+
+  DateTime _time;
+
+  DateTime get time => _time;
+
+  set setTime(DateTime value) {
+    _time = value;
+  }
+
+  WordPair _word;
+
+  WordPair get word => _word;
+
+  set setWord(WordPair value) {
+    _word = value;
+  }
+
+  Saves(this._time, this._word);
+
+}
+
 class MyApp extends StatelessWidget {
   // This widget is the root of application.
   @override
