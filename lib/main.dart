@@ -73,6 +73,9 @@ class RandomWordsState extends State<RandomWords> {
   // to save wordpairs in a set
   final Set<WordPair> _saved = Set<WordPair>();
   final TextStyle _biggerFont = const TextStyle(fontSize: 18);
+  final formatter = new DateFormat.yMd().add_jms();
+
+  Set<Saves> _savingSet = Set<Saves>();
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,18 @@ class RandomWordsState extends State<RandomWords> {
   }
 
   Widget _buildRow(WordPair pair) {
-    final bool alreadySaved = _saved.contains(pair);
+//    final bool alreadySaved = _saved.contains(pair);
+    bool alreadySaved = false;
+
+    Saves s = new Saves(null,null);
+
+    if (getItemInSavingSet(pair) != null){
+      print("Word in Set");
+      s = getItemInSavingSet(pair);
+      alreadySaved = true;
+    }
+
+    DateTime timeNow = DateTime.now();
 
     return ListTile(
       title: Text(
@@ -141,27 +155,82 @@ class RandomWordsState extends State<RandomWords> {
       onTap: () {
         setState(() {
           if (alreadySaved) {
-            _saved.remove(pair);
+//            _saved.remove(pair);
+            print("INFO: Removed");
+            var j = _savingSet.remove(s);
+            if (j){
+              print("remove done");
+            }
           } else {
-            _saved.add(pair);
+//            _saved.add(pair);
+          print("INFO: SAVED");
+          print(pair);
+          s.setWord = pair;
+          s.setTime = timeNow;
+          _savingSet.add(s);
           }
         });
       },
     );
+
   }
 
+// ORIGINAL TUTORIAL FUNCTION
+//
+//  void _pushSaved() {
+//    Navigator.of(context).push(
+//      MaterialPageRoute<void>(
+//        builder: (BuildContext context) {
+//          final Iterable<ListTile> tiles = _saved.map(
+//                (WordPair pair) {
+//              return ListTile(
+//                title: Text(
+//                  pair.asPascalCase,
+//                  style: _biggerFont,
+//                ),
+//                trailing: Text("Sample Time",
+//                  style: _biggerFont,
+//                ),
+//              );
+//            },
+//          );
+//          final List<Widget> divided = ListTile
+//              .divideTiles(
+//            context: context,
+//            tiles: tiles,
+//          )
+//              .toList();
+//
+//          return Scaffold(
+//            appBar: AppBar(
+//              title: Text('My Saves'),
+//            ),
+//            body: ListView(children: divided),
+//          );
+//        },
+//      ),
+//    );
+//  }
 
   void _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final Iterable<ListTile> tiles = _saved.map(
-                (WordPair pair) {
+          final Iterable<ListTile> tiles = _savingSet.map(
+                (Saves s) {
               return ListTile(
+                leading: Icon(Icons.crop_square
+                ),
                 title: Text(
-                  pair.asPascalCase,
+                  s._word.asPascalCase,
                   style: _biggerFont,
                 ),
+                subtitle: Text(
+//                  s._time.toString(),
+                  formatter.format(s._time),
+//                  style: _biggerFont,
+                ),
+
               );
             },
           );
